@@ -11,7 +11,11 @@ select * from books where publication_year > 2000
 
 --3.  Show all books with available copies greater than 5.
 
-select title as book_title from books where available_copies >= 5
+select title as book_title 
+from 
+    books 
+where
+    available_copies >= 5
 
 -- 4.  Sort books by publication year (newest first).
 
@@ -19,10 +23,15 @@ select * from books order by publication_year desc
 
 -- 5 . Display only Fantasy books (this will require a JOIN).
 
-select b.title as book_name, c.catagory_name from books b inner join catagories c on c.catagory_id=b.catagorie_id where catagory_name = 'fantasy'
+select b.title as book_name, c.catagory_name 
+from 
+    books b inner join catagories c 
+on 
+    c.catagory_id=b.catagorie_id 
+where 
+    catagory_name = 'fantasy'
 
 -- 6 . How many books are available in our library?
-
 
 select count(title) as number_of_books from books
 
@@ -32,7 +41,13 @@ select distinct catagory_name from catagories
 
 -- 8 . Find all books published between 1990 and 2010.
 
-select  title, publication_year from books where publication_year between 1990 and 2010 order by publication_year desc
+select  title, publication_year 
+from 
+    books 
+where
+    publication_year between 1990 and 2010 
+order by 
+    publication_year desc
 
 -- 9 . Find all students whose names start with the letter R
 
@@ -43,7 +58,7 @@ select* from stu_dents where student_name like 'R%'
 select*  from books where title like 'the%'
 
 -- 11 . How many students are registered in the library
-select * from stu_dents
+
 
 select count(students_id) as number_of_students_registered from stu_dents
 
@@ -99,11 +114,25 @@ select count(*) as total_books_issued from book_issue where return_date is null
 
 -- 24 . Which students have borrowed more than one book
 
-select top(1) s.students_id, s.student_name, count(b.book_id) as total_book_issued from book_issue b inner join stu_dents s on b.student_id=s.students_id group by s.students_id,s.student_name having count(b.book_id)> 0 order by total_book_issued desc
+select top(1) s.students_id, s.student_name, count(b.book_id) as total_book_issued 
+from 
+    book_issue b inner join stu_dents s 
+on 
+    b.student_id=s.students_id 
+group by 
+    s.students_id,s.student_name 
+having count(b.book_id)> 0 
+order by 
+    total_book_issued desc
 
 -- 25 . Books that have never been borrowed
 
-select books.book_id, books.title from books  left join book_issue on books.book_id=book_issue.book_id where book_issue.issue_date is null
+select books.book_id, books.title
+from books  left join book_issue 
+on
+    books.book_id=book_issue.book_id 
+where
+    book_issue.issue_date is null
 
 -- 26 . students who have never borrowed a book.
 
@@ -116,32 +145,86 @@ select s.students_id,s.student_name from stu_dents s left join book_issue b on s
 
 -- 28 . Find the student who has borrowed the highest number of books.
 
-select  s.students_id, s.student_name,count(b.book_id) as total_books from stu_dents s inner join book_issue b on s.students_id=b.student_id group by s.students_id,s.student_name order by total_books desc 
+select  s.students_id, s.student_name,count(b.book_id) as total_books
+from
+    stu_dents s inner join book_issue b 
+on 
+    s.students_id=b.student_id
+group by 
+    s.students_id,s.student_name 
+order by
+    total_books desc 
 
 -- 29. Find the books that have been borrowed the most.
 
-select count(books.book_id) as times_borrowed,books.title from books inner join book_issue on books.book_id = book_issue.book_id   
-group by books.title order by times_borrowed desc
+select count(books.book_id) as times_borrowed,books.title
+from
+    books inner join book_issue 
+on 
+    books.book_id = book_issue.book_id   
+group by
+    books.title
+order by 
+    times_borrowed desc
 
 -- 30 . Find all books that have been borrowed but have not been returned yet.
 
-select bb.book_id,bb.title from books bb inner join book_issue b on bb.book_id=b.book_id where return_date is null 
+select bb.book_id,bb.title 
+from 
+    books bb inner join book_issue b 
+on 
+    bb.book_id=b.book_id 
+where 
+    return_date is null 
 
 -- 31 . Find students who have not returned their books and whose books are overdue.
 
-select s.student_name,bb.title, b.due_date from stu_dents s join book_issue b on s.students_id=b.student_id join books bb on bb.book_id=b.book_id where return_date is null and due_date < getdate() 
+select
+    s.student_name,bb.title, b.due_date 
+from
+    stu_dents s join book_issue b 
+on 
+    s.students_id=b.student_id join books bb on bb.book_id=b.book_id 
+where 
+   return_date is null and due_date < getdate() 
 
 -- 32 . The author whose books have been borrowed the most.
 
-select top (1) a.author_name, count(bb.book_id) as most_borrowed from author a join books b on a.author_id = b.author_id join book_issue bb on b.book_id=bb.book_id  group by a.author_name order by most_borrowed desc
+select top (1) a.author_name, count(bb.book_id) as most_borrowed 
+from 
+    author a join books b on a.author_id = b.author_id join book_issue bb on b.book_id=bb.book_id  
+group by 
+    a.author_name 
+order by 
+    most_borrowed desc
 
 -- 33 . Category-wise Book Count
 
-select c.catagory_name, count(b.book_id) as book_count from catagories c left join books b on c.catagory_id=b.catagorie_id group by c.catagory_name order by book_count
+select c.catagory_name, count(b.book_id) as book_count 
+from 
+    catagories c left join books b 
+on 
+    c.catagory_id=b.catagorie_id 
+group by 
+    c.catagory_name 
+order by 
+    book_count
 
 -- 34 . Students who currently have more than one book issued
 
-select s.student_name, count(book_id) as books_count from stu_dents s inner join book_issue b on s.students_id=b.student_id  where b.return_date is null group by s.student_name having count(b.book_id) > 1 order by books_count desc
+select s.student_name, count(book_id) as books_count 
+from 
+    stu_dents s inner join book_issue b 
+on 
+    s.students_id=b.student_id  
+where 
+    b.return_date is null 
+group by 
+    s.student_name 
+having 
+    count(b.book_id) > 1 
+order by 
+    books_count desc
 
 -- 35.  the top 3 students who have borrowed the most books overall
 
@@ -157,8 +240,7 @@ select b.book_id,b.title from books b left join book_issue bb on b.book_id=bb.bo
 
 -- 38 . Category-wise Book Count
 select catagory_id, catagory_name, count(b.book_id) as book_count from catagories c left join books b on c.catagory_id = b.catagorie_id group by catagory_id,catagory_name order by book_count,c.catagory_id
-select * from catagories 
-select * from books
+
 
 -- 39 . Monthly Borrowing Trends
 
@@ -387,11 +469,6 @@ where bi.book_id is null
 group by b.book_id,b.title
 
 --Query 64: Find authors whose books have never been borrowed.
-select * from book_issue
-select * from author
-select * from catagories
-select * from stu_dents
-
 
 select a.author_id,a.author_name 
 from author a inner join books b on a.author_id=b.author_id left join book_issue bi on b.book_id=bi.book_id 
